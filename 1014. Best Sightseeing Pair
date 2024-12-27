@@ -1,0 +1,37 @@
+1014. Best Sightseeing Pair
+//solution 1
+    int maxScoreSightseeingPair(vector<int>& values) {
+        int n =values.size();
+        vector<int> first(n);
+        vector<int> second(n);
+        for(int i=0;i<n;i++){
+            first[i]=values[i]+i;
+            second[i]=values[i]-i;
+        }
+        vector<int> maxi(n); int mini=INT_MIN;
+        for(int i=n-1;i>=0;i--){
+            mini=max(second[i],mini);
+            maxi[i]=mini;
+        }
+        int ans=INT_MIN;
+        for(int i=1;i<n;i++){
+            ans=max(ans,first[i-1]+maxi[i]);
+        }
+        return ans;
+    }
+
+//solution 2
+    int maxScoreSightseeingPair(vector<int>& values) {
+      //int ans=values.size();
+      int m=values[0];
+      int ans=INT_MIN;
+      for(int i=1;i<values.size();i++){
+        if(values[i]-i+m>ans){
+            ans=values[i]-i+m;
+        }
+        if(values[i]+i>m){
+            m=values[i]+i;
+        }
+      }   
+      return ans;
+    }
