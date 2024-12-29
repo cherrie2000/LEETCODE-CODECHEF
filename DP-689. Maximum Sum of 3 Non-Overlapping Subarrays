@@ -1,0 +1,48 @@
+//689. Maximum Sum of 3 Non-Overlapping Subarrays
+
+class Solution {
+public:
+int dp[20002][4];
+int helper(vector<int>&subarray_sum, int k, int id, int rem){
+    if(rem==0) return 0;
+    if(id>=subarray_sum.size()) return INT_MIN;
+    if(dp[id][rem]!=-1) return dp[id][rem];
+    int take=subarray_sum[id]+helper(subarray_sum,k,id+k,rem-1);
+    int not_take=helper(subarray_sum,k,id+1,rem);
+
+    return dp[id][rem]=max(take,not_take);
+}
+void solve(vector<int>&subarray_sum, int k, int id, int rem,vector<int>& result){
+    if(rem==0) return;
+   // if(id>=sum.size()) return;
+   int take = subarray_sum[id]+helper(subarray_sum,k,id+k,rem-1);
+   int not_take=helper(subarray_sum,k,id+1,rem);
+
+   if(take>=not_take){
+    result.push_back(id);
+    solve(subarray_sum,k,id+k,rem-1,result);
+   }
+   else{
+    solve(subarray_sum,k,id+1,rem,result);
+   } 
+}
+    vector<int> maxSumOfThreeSubarrays(vector<int>& nums, int k) {
+        vector<int> subarray_sum;
+        memset(dp,-1,sizeof(dp));
+        int i=0, j=0; int sum=0;
+        while(j<nums.size()){
+            sum+=nums[j];
+
+            if(j-i+1==k){
+                subarray_sum.push_back(sum);
+                sum-=nums[i];
+                i++;
+            }
+            j++;
+        }
+
+        vector<int> result;
+        solve(subarray_sum,k,0,3,result);
+        return result;
+    }
+};
