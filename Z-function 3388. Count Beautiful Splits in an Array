@@ -1,0 +1,48 @@
+//3388. Count Beautiful Splits in an Array
+
+class Solution {
+public:
+vector<int> z_func(vector<int>& z, vector<int>& s, int n, int offset) {
+    fill(z.begin(), z.end(), 0);
+    int left = 0, right = 0;
+    for (int k = 1; k < n; k++) {
+        if (k > right) {
+            left = right = k;
+            while (right < n && s[offset + right] == s[offset + right - left]) 
+                right++;
+            z[k] = right - left;
+            right--;
+        } else {
+            int k1 = k - left; // Relative index within the Z-box
+            if (z[k1] < right - k + 1) {
+                z[k] = z[k1];
+            } else {
+                left = k;
+                while (right < n && s[offset + right] == s[offset + right - left]) 
+                    right++;
+                z[k] = right - left;
+                right--;
+            }
+        }
+    }
+    return z;
+}
+
+    int beautifulSplits(vector<int>& nums) {
+        int n=nums.size();
+        vector<int> z0(n),z(n);
+        z_func(z0,nums,n,0);
+        int res =0;
+
+        for(int i=1;i<n;i++){
+            z_func(z,nums,n-i,i);
+            for(int j=i+1;j<n;j++){
+                int len1=i, len2=j-i, len3=n-j;
+                if((len1<=len2 && z0[i]>=len1) || (len2<=len3 && z[j-i]>=len2)){
+                   res++;
+                }
+            }
+        }
+        return res;
+    }
+};
