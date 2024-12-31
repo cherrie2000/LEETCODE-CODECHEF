@@ -1,0 +1,20 @@
+//746. Min Cost Climbing Stairs
+
+class Solution {
+public:
+int dp[2000];
+int solve(vector<int>&cost,int id){
+    if(id>=cost.size()) return 0;
+     if(dp[id]!=-1) return dp[id];
+    int one_step=cost[id]+solve(cost,id+1);
+    int two_step = cost[id]+solve(cost,id+2);
+    return dp[id]=min(one_step,two_step);
+}
+    int minCostClimbingStairs(vector<int>& cost) {
+        memset(dp,-1,sizeof(dp));
+        int id_0=solve(cost,0);
+         memset(dp,-1,sizeof(dp));
+        int id_1 = solve(cost,1);
+        return min(id_0,id_1);
+    }
+};
