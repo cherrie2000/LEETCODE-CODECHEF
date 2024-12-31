@@ -1,0 +1,24 @@
+// 121. Best Time to Buy and Sell Stock
+class Solution {
+public:
+int dp[100003][2][3];
+int solve(vector<int>&prices, int id, bool buy, int k){
+    if(id ==prices.size() || k==0) return 0;
+    if(dp[id][buy][k]!=-1) return dp[id][buy][k];
+    int take , not_take;
+    if(buy){
+         take =solve(prices,id+1,false,k-1)- prices[id];
+         not_take = solve(prices,id+1,true,k);
+        
+    }
+    else{
+         take =  prices[id]+solve(prices,id+1,true,k-1);
+         not_take = solve(prices,id+1,false,k);
+    }
+    return dp[id][buy][k]= max(take,not_take);
+}
+    int maxProfit(vector<int>& prices) {
+        memset(dp,-1,sizeof(dp));
+       return solve(prices,0,true,2);
+    }
+};
