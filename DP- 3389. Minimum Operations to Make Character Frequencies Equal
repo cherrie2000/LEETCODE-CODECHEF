@@ -1,0 +1,37 @@
+//3389. Minimum Operations to Make Character Frequencies Equal
+
+class Solution {
+public:
+ int hash[26] = {0};
+ int dp[26][20004];
+    int solve(int id, int del, int target){
+        if(id==26) return 0;
+        int x = hash[id];
+        if(dp[id][del]!=-1) return dp[id][del];
+        if(x==target || x == 0) return solve(id+1,0,target);
+        if(x>target){
+            int deletion = x-target+solve(id+1,x-target,target);
+            return dp[id][del]= deletion;}
+        else{
+            int deletion = x+solve(id+1,x,target);
+            int insert = target-x+solve(id+1,0,target);
+            int change = solve(id+1,0,target)+target-x-(min(target-x,del));
+            return dp[id][del]=min({deletion,insert,change});
+        }
+        
+        
+    }
+    int makeStringGood(string s) {
+        for(auto it:s){
+            hash[it-'a']++;
+        }
+        int maxfreq= *max_element(hash,hash+26);
+        int ans=INT_MAX;
+        for(int i=0;i<=maxfreq;i++){
+            memset(dp,-1,sizeof(dp));
+           int mini = solve(0,0,i);
+           ans=min(ans,mini);
+        }
+        return ans;
+    }
+};
