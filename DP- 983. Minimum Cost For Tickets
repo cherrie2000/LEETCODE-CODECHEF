@@ -1,0 +1,30 @@
+//983. Minimum Cost For Tickets
+
+class Solution {
+public:
+int dp[368];
+int solve(vector<int>& days, vector<int>& costs, int id){
+    if(id >=days.size()) return 0;
+    if(dp[id]!= -1) return dp[id];
+    int cost_1= costs[0]+solve(days,costs,id+1);
+
+    int cost_7=0;
+    int max_days = days[id]+7;
+    int j=id;
+    while(j<days.size() && days[j]<max_days) j++;
+    cost_7=costs[1]+solve(days,costs,j);
+   
+    int cost_30=0;
+    int max_days_30 = days[id]+30;
+     j=id;
+    while(j<days.size() && days[j]<max_days_30) j++;
+    cost_30=costs[2]+solve(days,costs,j);
+    
+    return dp[id]=min({cost_1,cost_7,cost_30});
+
+}
+    int mincostTickets(vector<int>& days, vector<int>& costs) {
+        memset(dp,-1,sizeof(dp));
+        return solve(days, costs, 0);
+    }
+};
