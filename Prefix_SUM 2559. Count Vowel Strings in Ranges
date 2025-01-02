@@ -1,0 +1,30 @@
+//2559. Count Vowel Strings in Ranges
+
+class Solution {
+public:
+
+bool isVowel(char ch){
+    if(ch=='a' || ch=='e' || ch=='i' || ch=='o'|| ch=='u') return true;
+    return false;
+}
+    vector<int> vowelStrings(vector<string>& words, vector<vector<int>>& queries) {
+        int n= words.size();
+       vector<int> prefix(n+1,0);
+       int i =1;
+      for(int it=0;it<n;it++){
+        string st = words[it];
+        if(isVowel(st[0]) && isVowel(st[st.size()-1])){
+            prefix[i] = 1+prefix[i-1]; 
+        }
+        else prefix[i]=prefix[i-1];
+        i++;
+      }  
+
+      vector<int> range(queries.size());  i=0;
+      for(auto it:queries){
+        range[i] = prefix[it[1]+1]-prefix[it[0]];
+        i++;
+      }
+      return range;
+    }
+};
