@@ -1,0 +1,19 @@
+// 518. Coin Change II
+
+class Solution {
+public:
+int dp[5003][302];
+int solve(int amount, vector<int>& coins, int id){
+    if(amount==0) return 1;
+    if(amount<0 || id>=coins.size()) return 0;
+     if(dp[amount][id]!=-1) return dp[amount][id]; 
+    int take = solve(amount-coins[id],coins,id);
+    int not_take = solve(amount,coins,id+1);
+
+    return dp[amount][id]= take+not_take;
+}
+    int change(int amount, vector<int>& coins) {
+        memset(dp,-1,sizeof(dp));
+        return solve(amount,coins,0);
+    }
+};
