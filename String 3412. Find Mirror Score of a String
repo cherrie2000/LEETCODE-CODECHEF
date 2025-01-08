@@ -1,0 +1,31 @@
+//3412. Find Mirror Score of a String
+
+class Solution {
+public:
+    long long calculateScore(string s) {
+        unordered_map<char,vector<int>> mp;
+        vector<char> v;
+        for(char i='z';i>='a';i--){
+            v.push_back(i);
+        }
+        long long ans=0;
+        for(int i=0;i<s.length();i++){
+            char ch = v[s[i]-'a'];
+            if(mp.find(ch)!=mp.end()){
+                auto it=mp.find(ch);
+                int id = it->second.back();
+                ans+=(i-id);
+                it->second.pop_back();
+                if(it->second.size()==0){
+                    mp.erase(ch);
+                }
+                  //mp[s[i]].push_back(i);
+            }
+            else{
+                  mp[s[i]].push_back(i);
+            }
+          
+        }
+        return ans;
+    }
+};
