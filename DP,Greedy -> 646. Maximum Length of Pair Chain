@@ -1,0 +1,23 @@
+//646. Maximum Length of Pair Chain
+
+class Solution {
+public:
+int dp[1001][1002];
+int solve(vector<vector<int>>& pairs, int n , int id,int prev){
+    if(id>=n) return 0;
+    if(dp[id][prev+1]!=-1) return dp[id][prev+1];
+    int take=INT_MIN,not_take=0;
+    if(prev == -1 || pairs[prev][1]<pairs[id][0])
+    take = 1+solve(pairs,n,id+1,id);
+    not_take = solve(pairs,n,id+1,prev);
+
+    return dp[id][prev+1]=max(take,not_take);
+    
+}
+    int findLongestChain(vector<vector<int>>& pairs) {
+        memset(dp,-1,sizeof(dp));
+        int n=pairs.size();
+        sort(pairs.begin(),pairs.end());
+        return solve(pairs,n,0,-1);
+    }
+};
