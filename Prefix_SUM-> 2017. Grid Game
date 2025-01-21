@@ -1,0 +1,26 @@
+//2017. Grid Game
+
+class Solution {
+public:
+    long long gridGame(vector<vector<int>>& grid) {
+        int row=grid.size(), col = grid[0].size();
+        vector<long long> prefix_row2(col+1,0);
+
+        for(int i=0;i<col;i++){ 
+         prefix_row2[i+1]=prefix_row2[i]+grid[1][i];
+        }
+
+        long long total_row1=0;
+        for(int i=0;i<col;i++){
+            total_row1+=grid[0][i];
+        }
+        long long ans=LONG_LONG_MAX;
+        for(int i=0;i<col;i++){
+            total_row1 -=grid[0][i];
+            long long sec = prefix_row2[i];
+            long long best=max(total_row1,sec);
+            ans = (min(ans,best));
+        }
+        return ans;
+    }
+};
