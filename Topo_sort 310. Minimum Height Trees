@@ -1,0 +1,39 @@
+//310. Minimum Height Trees
+
+class Solution {
+public:
+    vector<int> findMinHeightTrees(int n, vector<vector<int>>& edges) {
+        if(n==1) return {0};
+
+        map<int,vector<int>> mp;
+        for(auto it:edges){
+            mp[it[0]].push_back(it[1]);
+            mp[it[1]].push_back(it[0]);
+        }
+
+        queue<int> q;
+         vector<int> vis(n,0);
+        for(auto it:mp){
+            if(it.second.size()==1) {
+                q.push(it.first);
+                vis[it.first]=1;
+            }
+        }
+        vector<int> temp;
+        while(!q.empty()){
+            temp.clear();
+            int size=q.size();
+            for(int i=0;i<size;i++){
+                int top=q.front(); temp.push_back(top);
+                q.pop();
+                for(auto it:mp[top]){
+                    if(vis[it]<mp[it].size()){
+                        vis[it]++;
+                        if(vis[it]==mp[it].size()-1) q.push(it);
+                    }
+                }
+            }
+        }
+        return temp;
+    }
+};
