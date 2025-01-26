@@ -1,0 +1,38 @@
+//329. Longest Increasing Path in a Matrix
+
+class Solution {
+public:
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        int row=matrix.size(), col=matrix[0].size();
+        int ans=0;
+        vector<vector<int>> dir={{0,1},{0,-1},{1,0},{-1,0}};
+        vector<vector<int>> indeg(row,vector<int>(col,0));
+        queue<pair<int,int>> q;
+        for(int i=0;i<row;i++){
+            for(int j=0;j<col;j++){
+                for(auto it:dir){
+                    int x = i+it[0], y=j+it[1];
+                    if(x<0 || x>=row || y<0 || y>=col) continue;
+
+                    if(matrix[i][j]>matrix[x][y]) indeg[i][j]++;
+                }
+                if(indeg[i][j]==0) q.push({i,j});
+            }
+        }
+
+        while(!q.empty()){
+            int size=q.size();
+            while(size--){
+           auto top = q.front(); q.pop();
+           int x = top.first, y=top.second; cout<<matrix[x][y]<<"  ";
+            for(auto it:dir){
+                int new_x= x+it[0], new_y=y+it[1];
+                if(new_x<0 || new_x>=row || new_y<0 || new_y>=col) continue;
+                
+                if(matrix[x][y]<matrix[new_x][new_y] && --indeg[new_x][new_y]==0){ q.push({new_x,new_y});  }
+            }} 
+            ans++;
+        }
+        return ans;
+    }
+};
