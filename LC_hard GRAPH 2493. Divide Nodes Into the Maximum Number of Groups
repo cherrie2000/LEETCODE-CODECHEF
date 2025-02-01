@@ -1,0 +1,69 @@
+//2493. Divide Nodes Into the Maximum Number of Groups
+
+class Solution {
+public:
+vector<int> color;
+bool isBipar(int node, int c, map<int,vector<int>>&adj, vector<int>&comp){
+    color[node]=c;
+    comp.push_back(node);
+    for(auto it:adj[node]){
+        if(color[it]==c) return false;
+        if(color[it]==-1 && !isBipar(it,1-c,adj,comp)) return false;
+    }
+    return true;
+
+}
+
+int max_group(vector<int>&comp,map<int,vector<int>>&adj, int n){
+    int ans=0;
+    for(auto it:comp){
+        int level=0;
+        queue<int> q;
+        q.push(it);
+        vector<int> vis(n,false);
+        vis[it]=true;
+        while(!q.empty()){
+            int size=q.size();
+            while(size--){
+                int top=q.front(); q.pop();
+                for(auto ngbr:adj[top]){
+                    if(vis[ngbr]==false){
+                        vis[ngbr]=true;
+                        q.push(ngbr);
+                    }
+                }
+            }
+            
+            level++;
+        }
+      
+        ans=max(ans,level);
+        
+    }
+    return ans;
+}
+    int magnificentSets(int n, vector<vector<int>>& edges) {
+        map<int, vector<int>> adj;
+        color.resize(n,-1);
+        for(auto it:edges){
+            adj[it[0]-1].push_back(it[1]-1);
+            adj[it[1]-1].push_back(it[0]-1);
+        }
+        vector<vector<int>> comp;
+        for(int i=0;i<n;i++){
+            if(color[i]==-1){
+                comp.emplace_back();
+                if(!isBipar(i,0,adj,comp.back()))
+                return -1;
+            }
+        }
+
+        int ans=0;
+        for(auto it:comp){
+
+            ans+= max_group(it,adj,n);
+            
+        }
+        return ans;
+    }
+};
