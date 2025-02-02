@@ -1,0 +1,45 @@
+//2127. Maximum Employees to Be Invited to a Meeting
+
+class Solution {
+public:
+    int maximumInvitations(vector<int>& favorite) {
+        int n=favorite.size();
+        vector<int> indeg(n,0);
+        vector<int> chainLen(n,0);
+
+        for(auto it:favorite){
+            indeg[it]++;
+        }
+        queue<int> q;
+        for(int i=0;i<n;i++){
+            if(indeg[i]==0) q.push(i);
+        }
+
+        vector<int> vis(n,0); 
+        while(!q.empty()){
+            int top=q.front(); q.pop();
+            vis[top]=1;
+            int fav = favorite[top];
+            chainLen[fav] = max(chainLen[fav],chainLen[top]+1);
+            if(--indeg[fav] ==0) q.push(fav);
+        }
+ 
+        int ans=0; int pairlen=0;
+        for(int i=0;i<n;i++){
+            if(vis[i]==1) continue;
+            int len=0, u=i;
+            while(vis[u]==0){
+                vis[u]=1;
+                int fav = favorite[u];
+                u=fav; len++; 
+            } //cout<<i<<" "<<len;
+            if(len==2){
+                pairlen+= 2+chainLen[i]+chainLen[favorite[i]];
+            }
+           else
+                ans=max(len,ans);
+            
+        }
+        return max(ans,pairlen);
+    }
+};
