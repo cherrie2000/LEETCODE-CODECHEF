@@ -1,0 +1,22 @@
+//2551. Put Marbles in Bags
+
+class Solution {
+public:
+    long long putMarbles(vector<int>& weights, int k) {
+        vector<long long> store;
+        for(int i=1; i<weights.size();i++){
+            store.push_back(weights[i-1]+weights[i]);
+        }
+        sort(store.begin(),store.end());
+
+        long long maxi=0, mini=0;
+        for(int i=0;i<k-1;i++){
+            mini+=store[i];
+        }
+        int n = store.size();
+        for(int i=0;i<k-1;i++){
+            maxi+=store[n-i-1];
+        }
+        return maxi -mini;
+    }
+};
