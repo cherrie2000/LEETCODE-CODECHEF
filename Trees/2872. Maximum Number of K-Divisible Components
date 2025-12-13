@@ -1,0 +1,31 @@
+class Solution {
+public:
+int count;
+int solve(unordered_map<int,vector<int>>&mp, vector<int>&values, int k, int parent,int node){
+    int sum=values[node];
+    for(auto child:mp[node]){
+        if(child!=parent){
+        sum+= solve(mp,values,k,node,child);
+        sum%=k;
+        }
+    }
+
+    if(sum%k==0){
+        count++;
+        return 0;
+    }
+    return sum%k;
+
+}
+    int maxKDivisibleComponents(int n, vector<vector<int>>& edges, vector<int>& values, int k) {
+      unordered_map<int,vector<int>> mp;
+      for(auto it:edges){
+        mp[it[0]].push_back(it[1]);
+        mp[it[1]].push_back(it[0]);
+      }  
+
+      count = 0;
+      solve(mp,values,k,-1,0);
+      return count;
+    }
+};
